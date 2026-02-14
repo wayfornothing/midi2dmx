@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI to DMX - Schémas Électroniques Visuels</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .diagram-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .diagram-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .legend {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .legend h3 {
+            color: #555;
+            margin-bottom: 10px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+        }
+        .legend-color {
+            width: 30px;
+            height: 20px;
+            margin-right: 10px;
+            border: 1px solid #333;
+            border-radius: 3px;
+        }
+        svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        .component-label {
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .pin-label {
+            font-size: 10px;
+            fill: #666;
+        }
+        .wire {
+            stroke-width: 2;
+            fill: none;
+        }
+        .wire-power {
+            stroke: #dc3545;
+        }
+        .wire-ground {
+            stroke: #000;
+        }
+        .wire-signal {
+            stroke: #007bff;
+        }
+        .wire-data {
+            stroke: #28a745;
+        }
+        .component-box {
+            fill: #fff;
+            stroke: #333;
+            stroke-width: 2;
+        }
+        .ic-chip {
+            fill: #2c3e50;
+            stroke: #000;
+            stroke-width: 2;
+        }
+        .resistor {
+            fill: #f39c12;
+            stroke: #000;
+            stroke-width: 1.5;
+        }
+        .capacitor {
+            fill: #3498db;
+            stroke: #000;
+            stroke-width: 1.5;
+        }
+        .diode {
+            fill: #e74c3c;
+            stroke: #000;
+            stroke-width: 1.5;
+        }
+        .connector {
+            fill: #95a5a6;
+            stroke: #000;
+            stroke-width: 2;
+        }
+        .esp32 {
+            fill: #34495e;
+            stroke: #000;
+            stroke-width: 2;
+        }
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .note strong {
+            color: #856404;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background: #667eea;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        @media print {
+            body {
+                background: white;
+            }
+            .diagram-section {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎹 MIDI to DMX - Schémas Électroniques Visuels 💡</h1>
+
+        <!-- Schéma 1: Circuit MIDI IN -->
+        <div class="diagram-section">
+            <h2>1. Circuit d'entrée MIDI (Optocoupleur 6N138)</h2>
+            
+            <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+                <!-- Connecteur DIN5 -->
+                <g id="din5">
+                    <circle class="connector" cx="100" cy="200" r="60"/>
+                    <circle cx="100" cy="170" r="8" fill="#fff" stroke="#000" stroke-width="1"/>
+                    <circle cx="80" cy="210" r="8" fill="#fff" stroke="#000" stroke-width="1"/>
+                    <circle cx="120" cy="210" r="8" fill="#fff" stroke="#000" stroke-width="1"/>
+                    <circle cx="90" cy="240" r="8" fill="#fff" stroke="#000" stroke-width="1"/>
+                    <circle cx="110" cy="240" r="8" fill="#fff" stroke="#000" stroke-width="1"/>
+                    <text x="100" y="130" text-anchor="middle" class="component-label">DIN5</text>
+                    <text x="100" y="155" text-anchor="middle" class="pin-label">Pin 5</text>
+                    <text x="60" y="215" text-anchor="middle" class="pin-label">Pin 2</text>
+                    <text x="140" y="215" text-anchor="middle" class="pin-label">Pin 4</text>
+                </g>
+
+                <!-- Diode D1 -->
+                <g id="diode">
+                    <polygon class="diode" points="200,195 220,205 220,185"/>
+                    <line x1="220" y1="185" x2="220" y2="205" stroke="#000" stroke-width="2"/>
+                    <text x="210" y="180" text-anchor="middle" class="component-label">D1</text>
+                    <text x="210" y="225" text-anchor="middle" class="pin-label">1N4148</text>
+                </g>
+
+                <!-- Résistance R3 -->
+                <g id="r3">
+                    <rect class="resistor" x="250" y="185" width="60" height="20" rx="3"/>
+                    <text x="280" y="180" text-anchor="middle" class="component-label">R3</text>
+                    <text x="280" y="225" text-anchor="middle" class="pin-label">280Ω</text>
+                </g>
+
+                <!-- Optocoupleur 6N138 -->
+                <g id="opto">
+                    <rect class="ic-chip" x="360" y="140" width="120" height="120" rx="5"/>
+                    <text x="420" y="125" text-anchor="middle" fill="white" class="component-label">6N138</text>
+                    
+                    <!-- Pins gauche -->
+                    <circle cx="360" cy="160" r="4" fill="#ffd700"/>
+                    <text x="340" y="165" text-anchor="end" class="pin-label">1</text>
+                    
+                    <circle cx="360" cy="190" r="4" fill="#ffd700"/>
+                    <text x="340" y="195" text-anchor="end" class="pin-label">2</text>
+                    
+                    <circle cx="360" cy="220" r="4" fill="#ffd700"/>
+                    <text x="340" y="225" text-anchor="end" class="pin-label">3</text>
+                    
+                    <circle cx="360" cy="250" r="4" fill="#ffd700"/>
+                    <text x="340" y="255" text-anchor="end" class="pin-label">4</text>
+                    
+                    <!-- Pins droite -->
+                    <circle cx="480" cy="160" r="4" fill="#ffd700"/>
+                    <text x="500" y="165" text-anchor="start" class="pin-label">6 (VCC)</text>
+                    
+                    <circle cx="480" cy="190" r="4" fill="#ffd700"/>
+                    <text x="500" y="195" text-anchor="start" class="pin-label">5 (OUT)</text>
+                    
+                    <circle cx="480" cy="220" r="4" fill="#ffd700"/>
+                    <text x="500" y="225" text-anchor="start" class="pin-label">7</text>
+                    
+                    <circle cx="480" cy="250" r="4" fill="#ffd700"/>
+                    <text x="500" y="255" text-anchor="start" class="pin-label">8</text>
+                    
+                    <!-- LED interne -->
+                    <circle cx="400" cy="200" r="15" fill="none" stroke="#ffd700" stroke-width="2"/>
+                    <text x="400" y="205" text-anchor="middle" fill="white" font-size="20">⚡</text>
+                </g>
+
+                <!-- Résistance R2 (Pull-up) -->
+                <g id="r2">
+                    <rect class="resistor" x="550" y="180" width="60" height="20" rx="3"/>
+                    <text x="580" y="175" text-anchor="middle" class="component-label">R2</text>
+                    <text x="580" y="220" text-anchor="middle" class="pin-label">220Ω</text>
+                </g>
+
+                <!-- ESP32 -->
+                <g id="esp32">
+                    <rect class="esp32" x="680" y="160" width="80" height="80" rx="5"/>
+                    <text x="720" y="145" text-anchor="middle" fill="white" class="component-label">ESP32</text>
+                    <text x="720" y="205" text-anchor="middle" fill="white" font-size="14">GPIO22</text>
+                    <text x="720" y="225" text-anchor="middle" fill="white" font-size="10">(MIDI RX)</text>
+                </g>
+
+                <!-- Connexions -->
+                <!-- DIN5 Pin5 vers Diode -->
+                <path class="wire wire-signal" d="M 100,170 L 180,195"/>
+                
+                <!-- Diode vers R3 -->
+                <path class="wire wire-signal" d="M 220,195 L 250,195"/>
+                
+                <!-- R3 vers Opto Pin1 -->
+                <path class="wire wire-signal" d="M 310,195 L 340,160 L 360,160"/>
+                
+                <!-- DIN5 Pin2 vers Opto Pin2 (GND) -->
+                <path class="wire wire-ground" d="M 80,210 L 80,280 L 360,280 L 360,190"/>
+                <text x="180" y="275" class="pin-label">GND</text>
+                
+                <!-- Opto Pin6 vers +5V -->
+                <path class="wire wire-power" d="M 480,160 L 580,160 L 580,100"/>
+                <text x="585" y="100" class="pin-label">+5V</text>
+                
+                <!-- Opto Pin5 vers R2 -->
+                <path class="wire wire-signal" d="M 480,190 L 550,190"/>
+                
+                <!-- R2 vers +3.3V -->
+                <path class="wire wire-power" d="M 610,190 L 640,190 L 640,120"/>
+                <text x="645" y="120" class="pin-label">+3.3V</text>
+                
+                <!-- Opto Pin5 vers ESP32 GPIO22 -->
+                <path class="wire wire-data" d="M 580,190 L 580,200 L 680,200"/>
+            </svg>
+
+            <div class="legend">
+                <h3>Légende des couleurs</h3>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #dc3545;"></div>
+                    <span>Alimentation (+5V, +3.3V)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #000;"></div>
+                    <span>Masse (GND)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #007bff;"></div>
+                    <span>Signal MIDI</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #28a745;"></div>
+                    <span>Signal vers ESP32</span>
+                </div>
+            </div>
+
+            <div class="note">
+                <strong>⚠️ Points importants :</strong>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>La diode D1 protège contre l'inversion de polarité</li>
+                    <li>R3 limite le courant dans la LED de l'optocoupleur</li>
+                    <li>R2 assure le pull-up de la sortie du phototransistor</li>
+                    <li>L'optocoupleur fournit une isolation galvanique complète</li>
+                    <li>Pin 6 du 6N138 nécessite +5V, mais sortie compatible 3.3V</li>
+                </ul>
+            </div>
+
+            <h3>Table de connexions MIDI IN</h3>
+            <table>
+                <tr>
+                    <th>Depuis</th>
+                    <th>Vers</th>
+                    <th>Type de signal</th>
+                </tr>
+                <tr>
+                    <td>DIN5 Pin 5</td>
+                    <td>D1 (Anode)</td>
+                    <td>MIDI Signal</td>
+                </tr>
+                <tr>
+                    <td>D1 (Cathode)</td>
+                    <td>R3</td>
+                    <td>MIDI Signal filtré</td>
+                </tr>
+                <tr>
+                    <td>R3</td>
+                    <td>6N138 Pin 1</td>
+                    <td>Courant LED limité</td>
+                </tr>
+                <tr>
+                    <td>DIN5 Pin 2</td>
+                    <td>6N138 Pin 2 + GND</td>
+                    <td>Masse commune</td>
+                </tr>
+                <tr>
+                    <td>6N138 Pin 6</td>
+                    <td>+5V</td>
+                    <td>Alimentation optocoupleur</td>
+                </tr>
+                <tr>
+                    <td>6N138 Pin 5</td>
+                    <td>R2 puis +3.3V</td>
+                    <td>Pull-up sortie</td>
+                </tr>
+                <tr>
+                    <td>6N138 Pin 5</td>
+                    <td>ESP32 GPIO22</td>
+                    <td>Signal MIDI décodé</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Schéma 2: Circuit DMX OUT -->
+        <div class="diagram-section">
+            <h2>2. Circuit de sortie DMX512 (Transceiver MAX485)</h2>
+            
+            <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+                <!-- ESP32 -->
+                <g id="esp32-dmx">
+                    <rect class="esp32" x="50" y="140" width="100" height="120" rx="5"/>
+                    <text x="100" y="125" text-anchor="middle" fill="white" class="component-label">ESP32</text>
+                    
+                    <circle cx="150" cy="170" r="4" fill="#ffd700"/>
+                    <text x="165" y="175" class="pin-label">GPIO17 (TX)</text>
+                    
+                    <circle cx="150" cy="200" r="4" fill="#ffd700"/>
+                    <text x="165" y="205" class="pin-label">GPIO21 (EN)</text>
+                    
+                    <circle cx="150" cy="230" r="4" fill="#ffd700"/>
+                    <text x="165" y="235" class="pin-label">GPIO16 (RX)</text>
+                </g>
+
+                <!-- MAX485 -->
+                <g id="max485">
+                    <rect class="ic-chip" x="360" y="120" width="140" height="160" rx="5"/>
+                    <text x="430" y="105" text-anchor="middle" fill="white" class="component-label">MAX485</text>
+                    
+                    <!-- Pins gauche -->
+                    <circle cx="360" cy="145" r="4" fill="#ffd700"/>
+                    <text x="340" y="150" text-anchor="end" class="pin-label">1 DI</text>
+                    
+                    <circle cx="360" cy="175" r="4" fill="#ffd700"/>
+                    <text x="340" y="180" text-anchor="end" class="pin-label">2 DE</text>
+                    
+                    <circle cx="360" cy="205" r="4" fill="#ffd700"/>
+                    <text x="340" y="210" text-anchor="end" class="pin-label">3 RE</text>
+                    
+                    <circle cx="360" cy="235" r="4" fill="#ffd700"/>
+                    <text x="340" y="240" text-anchor="end" class="pin-label">4 RO</text>
+                    
+                    <!-- Pins droite -->
+                    <circle cx="500" cy="145" r="4" fill="#ffd700"/>
+                    <text x="520" y="150" text-anchor="start" class="pin-label">8 VCC</text>
+                    
+                    <circle cx="500" cy="175" r="4" fill="#ffd700"/>
+                    <text x="520" y="180" text-anchor="start" class="pin-label">7 A (DMX+)</text>
+                    
+                    <circle cx="500" cy="205" r="4" fill="#ffd700"/>
+                    <text x="520" y="210" text-anchor="start" class="pin-label">6 B (DMX-)</text>
+                    
+                    <circle cx="500" cy="235" r="4" fill="#ffd700"/>
+                    <text x="520" y="240" text-anchor="start" class="pin-label">5 GND</text>
+                    
+                    <!-- RS-485 symbol -->
+                    <text x="430" y="200" text-anchor="middle" fill="white" font-size="24">⚡</text>
+                </g>
+
+                <!-- Résistances stabilisation -->
+                <g id="stabilization">
+                    <rect class="resistor" x="560" y="165" width="50" height="15" rx="3"/>
+                    <text x="585" y="160" text-anchor="middle" class="component-label">R5</text>
+                    <text x="585" y="200" text-anchor="middle" class="pin-label">10kΩ</text>
+                    
+                    <rect class="resistor" x="560" y="195" width="50" height="15" rx="3"/>
+                    <text x="585" y="230" text-anchor="middle" class="component-label">R6</text>
+                    <text x="585" y="243" text-anchor="middle" class="pin-label">10kΩ</text>
+                </g>
+
+                <!-- Connecteur XLR3 -->
+                <g id="xlr3">
+                    <circle class="connector" cx="700" cy="200" r="60"/>
+                    <circle cx="700" cy="165" r="10" fill="#fff" stroke="#000" stroke-width="2"/>
+                    <text x="700" y="170" text-anchor="middle" font-weight="bold">1</text>
+                    
+                    <circle cx="680" cy="215" r="10" fill="#fff" stroke="#000" stroke-width="2"/>
+                    <text x="680" y="220" text-anchor="middle" font-weight="bold">2</text>
+                    
+                    <circle cx="720" cy="215" r="10" fill="#fff" stroke="#000" stroke-width="2"/>
+                    <text x="720" y="220" text-anchor="middle" font-weight="bold">3</text>
+                    
+                    <text x="700" y="135" text-anchor="middle" class="component-label">XLR3 ♂</text>
+                    <text x="700" y="155" text-anchor="middle" class="pin-label">DMX OUT</text>
+                </g>
+
+                <!-- Connexions -->
+                <!-- ESP32 GPIO17 vers MAX485 DI -->
+                <path class="wire wire-data" d="M 150,170 L 360,145"/>
+                
+                <!-- ESP32 GPIO21 vers MAX485 DE et RE -->
+                <path class="wire wire-signal" d="M 150,200 L 280,200 L 280,175 L 360,175"/>
+                <path class="wire wire-signal" d="M 280,200 L 280,205 L 360,205"/>
+                
+                <!-- ESP32 GPIO16 vers MAX485 RO -->
+                <path class="wire wire-signal" d="M 150,230 L 360,235" stroke-dasharray="5,5"/>
+                
+                <!-- MAX485 VCC vers +5V -->
+                <path class="wire wire-power" d="M 500,145 L 585,145 L 585,80"/>
+                <text x="590" y="80" class="pin-label">+5V</text>
+                
+                <!-- MAX485 GND -->
+                <path class="wire wire-ground" d="M 500,235 L 585,235 L 585,320"/>
+                <text x="590" y="330" class="pin-label">GND</text>
+                
+                <!-- MAX485 A vers XLR Pin3 (DMX+) -->
+                <path class="wire wire-data" d="M 500,175 L 560,175 L 560,215 L 650,215 L 720,215" stroke="#28a745" stroke-width="3"/>
+                
+                <!-- MAX485 B vers XLR Pin2 (DMX-) -->
+                <path class="wire wire-data" d="M 500,205 L 530,205 L 530,235 L 640,235 L 680,215" stroke="#dc3545" stroke-width="3"/>
+                
+                <!-- XLR Pin1 vers GND -->
+                <path class="wire wire-ground" d="M 700,165 L 700,140 L 650,140 L 650,320"/>
+                
+                <!-- Résistances stabilisation -->
+                <path class="wire wire-ground" d="M 610,175 L 630,175 L 630,320"/>
+                <path class="wire wire-ground" d="M 610,205 L 640,205 L 640,320"/>
+            </svg>
+
+            <div class="legend">
+                <h3>Légende des couleurs</h3>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #dc3545;"></div>
+                    <span>Alimentation +5V</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #000;"></div>
+                    <span>Masse (GND)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #007bff;"></div>
+                    <span>Signaux de contrôle</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #28a745;"></div>
+                    <span>DMX+ (A)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #dc3545;"></div>
+                    <span>DMX- (B)</span>
+                </div>
+            </div>
+
+            <div class="note">
+                <strong>⚠️ Points critiques :</strong>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li><strong>NE PAS</strong> inverser DMX+ (A) et DMX- (B)</li>
+                    <li>Pin A (7) = DMX+ = XLR Pin 3 = Vert</li>
+                    <li>Pin B (6) = DMX- = XLR Pin 2 = Rouge</li>
+                    <li>XLR Pin 1 = GND/Shield = Noir</li>
+                    <li>DE et RE doivent être reliés ensemble à GPIO21</li>
+                    <li>Résistances R5/R6 stabilisent la ligne au repos</li>
+                    <li>Résistance de terminaison 120Ω : seulement sur le DERNIER appareil DMX</li>
+                </ul>
+            </div>
+
+            <h3>Table de connexions DMX OUT</h3>
+            <table>
+                <tr>
+                    <th>ESP32</th>
+                    <th>MAX485</th>
+                    <th>XLR3</th>
+                    <th>Fonction</th>
+                </tr>
+                <tr>
+                    <td>GPIO17</td>
+                    <td>Pin 1 (DI)</td>
+                    <td>-</td>
+                    <td>Données TX DMX</td>
+                </tr>
+                <tr>
+                    <td>GPIO21</td>
+                    <td>Pin 2+3 (DE/RE)</td>
+                    <td>-</td>
+                    <td>Enable TX/RX</td>
+                </tr>
+                <tr>
+                    <td>GPIO16</td>
+                    <td>Pin 4 (RO)</td>
+                    <td>-</td>
+                    <td>Données RX (optionnel)</td>
+                </tr>
+                <tr>
+                    <td>+5V</td>
+                    <td>Pin 8 (VCC)</td>
+                    <td>-</td>
+                    <td>Alimentation</td>
+                </tr>
+                <tr>
+                    <td>GND</td>
+                    <td>Pin 5 (GND)</td>
+                    <td>Pin 1</td>
+                    <td>Masse commune</td>
+                </tr>
+                <tr>
+                    <td>-</td>
+                    <td>Pin 7 (A)</td>
+                    <td>Pin 3</td>
+                    <td>DMX+ (Signal différentiel +)</td>
+                </tr>
+                <tr>
+                    <td>-</td>
+                    <td>Pin 6 (B)</td>
+                    <td>Pin 2</td>
+                    <td>DMX- (Signal différentiel -)</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Schéma 3: Vue d'ensemble complète -->
+        <div class="diagram-section">
+            <h2>3. Schéma complet intégré</h2>
+            
+            <svg viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg">
+                <!-- Fond -->
+                <rect x="10" y="10" width="1180" height="580" fill="#f8f9fa" stroke="#333" stroke-width="2" rx="10"/>
+                
+                <!-- Titre interne -->
+                <text x="600" y="40" text-anchor="middle" font-size="24" font-weight="bold" fill="#667eea">
+                    Interface MIDI to DMX - ESP32
+                </text>
+                
+                <!-- Section MIDI IN -->
+                <rect x="50" y="80" width="280" height="480" fill="#e3f2fd" stroke="#2196f3" stroke-width="2" rx="10"/>
+                <text x="190" y="110" text-anchor="middle" font-size="16" font-weight="bold" fill="#1976d2">
+                    ENTRÉE MIDI
+                </text>
+                
+                <!-- DIN5 simplifié -->
+                <circle cx="190" cy="200" r="40" class="connector"/>
+                <text x="190" y="175" text-anchor="middle" class="component-label">DIN5 ♀</text>
+                <text x="190" y="260" text-anchor="middle" class="pin-label">Connecteur MIDI IN</text>
+                
+                <!-- Optocoupleur box -->
+                <rect x="140" y="320" width="100" height="80" class="ic-chip" rx="5"/>
+                <text x="190" y="315" text-anchor="middle" fill="white" class="component-label">6N138</text>
+                <text x="190" y="365" text-anchor="middle" fill="white" font-size="12">Optocoupleur</text>
+                
+                <!-- Composants passifs -->
+                <circle cx="150" cy="280" r="8" class="diode"/>
+                <text x="150" y="270" text-anchor="middle" class="pin-label">D1</text>
+                
+                <rect x="200" y="275" width="40" height="10" class="resistor"/>
+                <text x="220" y="270" text-anchor="middle" class="pin-label">R3</text>
+                
+                <rect x="200" y="430" width="40" height="10" class="resistor"/>
+                <text x="220" y="450" text-anchor="middle" class="pin-label">R2</text>
+                
+                <!-- Section ESP32 -->
+                <rect x="380" y="80" width="440" height="480" fill="#fff3e0" stroke="#ff9800" stroke-width="2" rx="10"/>
+                <text x="600" y="110" text-anchor="middle" font-size="16" font-weight="bold" fill="#f57c00">
+                    MICROCONTRÔLEUR ESP32
+                </text>
+                
+                <!-- ESP32 représentation -->
+                <rect x="480" y="200" width="240" height="260" class="esp32" rx="10"/>
+                <text x="600" y="230" text-anchor="middle" fill="white" font-size="20" font-weight="bold">
+                    ESP32 DevKit V1
+                </text>
+                
+                <!-- GPIO labels -->
+                <text x="495" y="280" fill="white" font-size="11">GPIO22 ← MIDI RX</text>
+                <text x="495" y="310" fill="white" font-size="11">GPIO17 → DMX TX</text>
+                <text x="495" y="340" fill="white" font-size="11">GPIO21 → DMX EN</text>
+                <text x="495" y="370" fill="white" font-size="11">GPIO16 ← DMX RX</text>
+                <text x="495" y="400" fill="white" font-size="11">GPIO2 → LED Status</text>
+                
+                <!-- WiFi antenna -->
+                <text x="600" y="170" text-anchor="middle" font-size="24">📶</text>
+                <text x="600" y="195" text-anchor="middle" class="pin-label">WiFi AP</text>
+                
+                <!-- Section DMX OUT -->
+                <rect x="870" y="80" width="280" height="480" fill="#e8f5e9" stroke="#4caf50" stroke-width="2" rx="10"/>
+                <text x="1010" y="110" text-anchor="middle" font-size="16" font-weight="bold" fill="#2e7d32">
+                    SORTIE DMX512
+                </text>
+                
+                <!-- MAX485 box -->
+                <rect x="960" y="240" width="100" height="100" class="ic-chip" rx="5"/>
+                <text x="1010" y="235" text-anchor="middle" fill="white" class="component-label">MAX485</text>
+                <text x="1010" y="295" text-anchor="middle" fill="white" font-size="12">RS-485</text>
+                
+                <!-- XLR3 simplifié -->
+                <circle cx="1010" cy="450" r="40" class="connector"/>
+                <text x="1010" y="425" text-anchor="middle" class="component-label">XLR3 ♂</text>
+                <text x="1010" y="510" text-anchor="middle" class="pin-label">Connecteur DMX OUT</text>
+                
+                <!-- Résistances -->
+                <rect x="920" y="380" width="30" height="10" class="resistor"/>
+                <text x="935" y="375" text-anchor="middle" class="pin-label">R5</text>
+                
+                <rect x="1060" y="380" width="30" height="10" class="resistor"/>
+                <text x="1075" y="375" text-anchor="middle" class="pin-label">R6</text>
+                
+                <!-- Connexions majeures -->
+                <!-- MIDI path -->
+                <path class="wire wire-signal" d="M 230,200 L 350,200 L 350,270 L 480,270" stroke-width="3"/>
+                <text x="350" y="190" class="pin-label">Signal MIDI</text>
+                
+                <!-- DMX path -->
+                <path class="wire wire-data" d="M 720,300 L 850,300 L 850,280 L 960,280" stroke-width="3"/>
+                <text x="850" y="290" class="pin-label">Signal DMX</text>
+                
+                <!-- DMX to XLR -->
+                <path class="wire wire-data" d="M 1010,340 L 1010,410" stroke-width="3"/>
+                
+                <!-- Power indicators -->
+                <text x="600" y="145" text-anchor="middle" fill="#dc3545" font-size="14" font-weight="bold">
+                    Alimentation USB 5V (2A min)
+                </text>
+                
+                <!-- Légende intégrée -->
+                <g id="integrated-legend">
+                    <rect x="50" y="570" width="1100" height="2" fill="#333"/>
+                    <text x="60" y="595" class="pin-label">Flux de données: MIDI IN → Optocoupleur → ESP32 → MAX485 → DMX OUT</text>
+                </g>
+            </svg>
+
+            <div class="note">
+                <strong>📋 Récapitulatif des connexions principales :</strong>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li><strong>MIDI IN</strong> : DIN5 → 6N138 (isolation) → ESP32 GPIO22</li>
+                    <li><strong>DMX OUT</strong> : ESP32 GPIO17 → MAX485 → XLR3</li>
+                    <li><strong>Alimentation</strong> : USB 5V → ESP32 + 6N138 + MAX485</li>
+                    <li><strong>WiFi</strong> : Point d'accès "MIDI-DMX-Interface" sur ESP32</li>
+                    <li><strong>Interface Web</strong> : http://192.168.4.1</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Liste de matériel visuelle -->
+        <div class="diagram-section">
+            <h2>4. Liste de courses - Vue d'ensemble</h2>
+            
+            <svg viewBox="0 0 1000 700" xmlns="http://www.w3.org/2000/svg">
+                <!-- Grille de composants -->
+                <!-- ESP32 -->
+                <g transform="translate(80, 50)">
+                    <rect class="esp32" width="120" height="80" rx="5"/>
+                    <text x="60" y="100" text-anchor="middle" class="component-label">ESP32 DevKit V1</text>
+                    <text x="60" y="120" text-anchor="middle" class="pin-label">~8€</text>
+                </g>
+                
+                <!-- 6N138 -->
+                <g transform="translate(260, 50)">
+                    <rect class="ic-chip" width="80" height="60" rx="5"/>
+                    <text x="40" y="80" text-anchor="middle" fill="white" class="component-label">6N138</text>
+                    <text x="40" y="100" text-anchor="middle" class="pin-label">~1€</text>
+                </g>
+                
+                <!-- MAX485 -->
+                <g transform="translate(400, 50)">
+                    <rect class="ic-chip" width="80" height="60" rx="5"/>
+                    <text x="40" y="80" text-anchor="middle" fill="white" class="component-label">MAX485</text>
+                    <text x="40" y="100" text-anchor="middle" class="pin-label">~1€</text>
+                </g>
+                
+                <!-- Résistances -->
+                <g transform="translate(540, 50)">
+                    <rect class="resistor" width="100" height="20"/>
+                    <rect class="resistor" y="25" width="100" height="20"/>
+                    <rect class="resistor" y="50" width="100" height="20"/>
+                    <text x="50" y="95" text-anchor="middle" class="component-label">Résistances x5</text>
+                    <text x="50" y="115" text-anchor="middle" class="pin-label">~2€ (kit)</text>
+                </g>
+                
+                <!-- Condensateurs -->
+                <g transform="translate(700, 50)">
+                    <rect class="capacitor" width="30" height="40" rx="3"/>
+                    <rect class="capacitor" x="40" width="30" height="40" rx="3"/>
+                    <text x="35" y="60" text-anchor="middle" class="component-label">Condo x2</text>
+                    <text x="35" y="80" text-anchor="middle" class="pin-label">100nF</text>
+                    <text x="35" y="100" text-anchor="middle" class="pin-label">~0.50€</text>
+                </g>
+                
+                <!-- Diode -->
+                <g transform="translate(800, 50)">
+                    <polygon class="diode" points="0,10 20,20 20,0"/>
+                    <text x="10" y="45" text-anchor="middle" class="component-label">1N4148</text>
+                    <text x="10" y="65" text-anchor="middle" class="pin-label">~0.20€</text>
+                </g>
+                
+                <!-- DIN5 -->
+                <g transform="translate(80, 200)">
+                    <circle class="connector" cx="40" cy="40" r="35"/>
+                    <text x="40" y="95" text-anchor="middle" class="component-label">DIN5 ♀</text>
+                    <text x="40" y="115" text-anchor="middle" class="pin-label">~2€</text>
+                </g>
+                
+                <!-- XLR3 -->
+                <g transform="translate(200, 200)">
+                    <circle class="connector" cx="40" cy="40" r="35"/>
+                    <text x="40" y="95" text-anchor="middle" class="component-label">XLR3 ♂</text>
+                    <text x="40" y="115" text-anchor="middle" class="pin-label">~3€</text>
+                </g>
+                
+                <!-- Boîtier -->
+                <g transform="translate(320, 180)">
+                    <rect fill="#95a5a6" stroke="#000" stroke-width="2" width="120" height="80" rx="5"/>
+                    <text x="60" y="100" text-anchor="middle" class="component-label">Boîtier</text>
+                    <text x="60" y="120" text-anchor="middle" class="pin-label">~5€</text>
+                </g>
+                
+                <!-- Câbles -->
+                <g transform="translate(500, 200)">
+                    <line x1="0" y1="40" x2="100" y2="40" stroke="#f39c12" stroke-width="8" stroke-linecap="round"/>
+                    <text x="50" y="70" text-anchor="middle" class="component-label">Câbles</text>
+                    <text x="50" y="90" text-anchor="middle" class="pin-label">Fil souple 0.25mm²</text>
+                </g>
+                
+                <!-- USB -->
+                <g transform="translate(670, 200)">
+                    <rect fill="#3498db" stroke="#000" stroke-width="2" width="80" height="30" rx="3"/>
+                    <text x="40" y="20" text-anchor="middle" fill="white" font-size="12">USB</text>
+                    <text x="40" y="55" text-anchor="middle" class="component-label">Câble USB</text>
+                    <text x="40" y="75" text-anchor="middle" class="pin-label">Micro-USB</text>
+                </g>
+                
+                <!-- Total -->
+                <rect x="50" y="350" width="900" height="80" fill="#667eea" rx="10"/>
+                <text x="500" y="385" text-anchor="middle" fill="white" font-size="24" font-weight="bold">
+                    COÛT TOTAL APPROXIMATIF
+                </text>
+                <text x="500" y="415" text-anchor="middle" fill="white" font-size="32" font-weight="bold">
+                    ~ 23€
+                </text>
+                
+                <!-- Outils nécessaires -->
+                <text x="50" y="480" font-size="18" font-weight="bold" fill="#667eea">
+                    Outils nécessaires :
+                </text>
+                <text x="70" y="510" font-size="14">🔧 Fer à souder + étain</text>
+                <text x="70" y="535" font-size="14">✂️ Pince coupante + dénudeuse</text>
+                <text x="70" y="560" font-size="14">📏 Multimètre (test continuité)</text>
+                <text x="70" y="585" font-size="14">🪛 Tournevis petit format</text>
+                <text x="70" y="610" font-size="14">🧰 Breadboard (prototypage)</text>
+                
+                <!-- Temps de montage -->
+                <rect x="500" y="470" width="450" height="160" fill="#f8f9fa" stroke="#667eea" stroke-width="2" rx="10"/>
+                <text x="725" y="500" text-anchor="middle" font-size="18" font-weight="bold" fill="#667eea">
+                    Temps de montage estimé :
+                </text>
+                <text x="725" y="535" text-anchor="middle" font-size="14">⏱️ Breadboard : 1-2 heures</text>
+                <text x="725" y="560" text-anchor="middle" font-size="14">⏱️ PCB proto : 3-4 heures</text>
+                <text x="725" y="585" text-anchor="middle" font-size="14">⏱️ Boîtier final : 1 heure</text>
+                <text x="725" y="615" text-anchor="middle" font-size="14" font-weight="bold">
+                    TOTAL : 5-7 heures
+                </text>
+            </svg>
+        </div>
+
+        <!-- Footer -->
+        <div class="diagram-section" style="text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+            <h2 style="color: white; border: none;">🎹 Happy Building! 💡</h2>
+            <p style="margin-top: 20px; font-size: 1.1em;">
+                Pour plus de détails, consultez les fichiers README.md, INSTALLATION.md et SCHEMATICS.md
+            </p>
+            <p style="margin-top: 10px;">
+                Interface MIDI to DMX - ESP32 Project
+            </p>
+        </div>
+    </div>
+</body>
+</html>
