@@ -6,7 +6,7 @@
 
 // ============ CONFIGURATION WIFI ============
 void wifi_init() {
-    Serial.println("Démarrage WiFi Access Point...");
+    Logger::info("Démarrage WiFi Access Point...");
 
     WiFi.mode(WIFI_AP);
     WiFi.softAP(AP_SSID, AP_PASS);
@@ -14,7 +14,7 @@ void wifi_init() {
     delay(100);
 
     IPAddress IP = WiFi.softAPIP();
-    Serial.printf("AP IP: %s\n", IP.toString().c_str());
-    Serial.printf("SSID: %s\n", AP_SSID);
-    Serial.printf("Password: %s\n", AP_PASS);
+    Logger::info("AP IP: %s\n", IP.toString().c_str());
+    Logger::info("SSID: %s\n", AP_SSID);
+    Logger::info("Password: %s\n", AP_PASS);
 }

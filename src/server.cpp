@@ -5,10 +5,7 @@
 #include <ArduinoJson.h>
 
 static WebServer _server(80);
-
-
 static MappingConfig _config;
-static Midi2DMX _midi2dmx;
 
 void handleRoot()
 {
@@ -369,8 +366,8 @@ void handleRoot()
 void handleAPIStatus() {
     StaticJsonDocument<512> doc;
 
-    Midi2DMXStats& stats = _midi2dmx.get_stats();
-    uint8_t* dmx_data = _midi2dmx.get_dmx_data();
+    Midi2DMXStats& stats = midi2dmx_get_stats();
+    uint8_t* dmx_data = midi2dmx_get_dmx_data();
 
     doc["midiMessages"] = stats.midiMessagesReceived;
     doc["dmxFrames"] = stats.dmxFramesSent;
@@ -428,11 +425,11 @@ void handleAPISetConfig() {
             _config.save();
 
             // Reconfigure MIDI avec nouveau canal
-            _midi2dmx.begin(_config.midiChannel);
+            midi2dmx_begin(_config.midiChannel);
             // MIDI.begin(_config.midiChannel == 0 ? MIDI_CHANNEL_OMNI : _config.midiChannel);
 
             _server.send(200, "application/json", "{\"success\":true}");
-            Serial.println("Configuration mise à jour");
+            Logger::info("Configuration mise à jour");
             return;
         }
     }
@@ -444,7 +441,7 @@ void handleAPISetConfig() {
 void handleAPIDMXData() {
     StaticJsonDocument<2048> doc;
     JsonArray array = doc.to<JsonArray>();
-    uint8_t* dmx_data = _midi2dmx.get_dmx_data();
+    uint8_t* dmx_data = midi2dmx_get_dmx_data();
 
     for (int i = 0; i <= DMX_CHANNELS; i++) {
         array.add(dmx_data[i]);
@@ -460,7 +457,7 @@ void handleAPIDMXSet() {
     if (_server.hasArg("plain")) {
         StaticJsonDocument<128> doc;
         deserializeJson(doc, _server.arg("plain"));
-        uint8_t* dmx_data = _midi2dmx.get_dmx_data();
+        uint8_t* dmx_data = midi2dmx_get_dmx_data();
 
         int channel = doc["channel"];
         int value = doc["value"];
@@ -477,15 +474,15 @@ void handleAPIDMXSet() {
 
 
 void handleAPIDMXClear() {
-    uint8_t* dmx_data = _midi2dmx.get_dmx_data();
+    uint8_t* dmx_data = midi2dmx_get_dmx_data();
     memset(dmx_data + 1, 0, DMX_CHANNELS);
     _server.send(200, "application/json", "{\"success\":true}");
-    Serial.println("Tous les canaux DMX effacés");
+    Logger::info("Tous les canaux DMX effacés");
 }
 
 void handleAPITest() {
     // Flash tous les canaux
-    uint8_t* dmx_data = _midi2dmx.get_dmx_data();
+    uint8_t* dmx_data = midi2dmx_get_dmx_data();
 
     for (int i = 1; i <= DMX_CHANNELS; i++) {
         dmx_data[i] = 255;
@@ -494,7 +491,7 @@ void handleAPITest() {
     memset(dmx_data + 1, 0, DMX_CHANNELS);
 
     _server.send(200, "application/json", "{\"success\":true}");
-    Serial.println("Test DMX effectué");
+    Logger::info("Test DMX effectué");
 }
 
 
@@ -502,9 +499,8 @@ void server_tick() {
     _server.handleClient();
 }
 
-void server_init(Midi2DMX& midi2dmx, MappingConfig& config, uint16_t port) {
+void server_init(MappingConfig& config, uint16_t port) {
     _config = config;
-    _midi2dmx = midi2dmx;
     // Page principale
     _server.on("/", HTTP_GET, handleRoot);
 
@@ -518,5 +514,5 @@ void server_init(Midi2DMX& midi2dmx, MappingConfig& config, uint16_t port) {
     _server.on("/api/test", HTTP_POST, handleAPITest);
 
     _server.begin();
-    Serial.println("Serveur Web démarré");
+    Logger::info("Serveur Web démarré");
 }

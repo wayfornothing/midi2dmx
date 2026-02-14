@@ -3,6 +3,8 @@
 #include <EEPROM.h>
 #include <Arduino.h>
 
+#include "logger.h"
+
 // ============ CONFIGURATION PINS ============
 #define DMX_TX_PIN 17 // TX vers MAX485
 #define DMX_RX_PIN 16 // RX depuis MAX485 (non utilisé en TX only)
@@ -48,7 +50,7 @@ struct MappingConfig {
         EEPROM.write(5, persistentNotes ? 1 : 0);
         EEPROM.commit();
 
-        Serial.println("Configuration sauvegardée en EEPROM");
+        Logger::info("Configuration sauvegardée en EEPROM");
     }
 
     void load() {
@@ -61,7 +63,7 @@ struct MappingConfig {
             velocityScale = EEPROM.read(4);
             persistentNotes = EEPROM.read(5) == 1;
 
-            Serial.println("Configuration chargée depuis EEPROM");
+            Logger::info("Configuration chargée depuis EEPROM");
         }
         else {
             // Configuration par défaut
@@ -71,7 +73,11 @@ struct MappingConfig {
             velocityScale = 2;
             persistentNotes = false;
 
-            Serial.println("Configuration par défaut chargée");
+            Logger::info("Configuration par défaut chargée");
         }
+    }
+
+    MappingConfig() {
+        load();
     }
 };
